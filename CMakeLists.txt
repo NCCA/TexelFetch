@@ -21,12 +21,19 @@ set(TargetName TexelFetch)
 find_package(NGL CONFIG REQUIRED)
 # Instruct CMake to run moc automatically when needed (Qt projects only)
 set(CMAKE_AUTOMOC ON)
-# find Qt libs
-find_package(Qt5Widgets)
+# find Qt libs first we check for Version 6
+find_package(Qt6 COMPONENTS OpenGL Widgets QUIET )
+if ( Qt6_FOUND )
+    message("Found Qt6 Using that")
+else()
+    message("Found Qt5 Using that")
+    find_package(Qt5 COMPONENTS OpenGL Widgets REQUIRED)
+endif()
 # use C++ 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
+
 # Set the name of the executable we want to build
 add_executable(${TargetName})
 
@@ -37,7 +44,7 @@ target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
 			${PROJECT_SOURCE_DIR}/include/NGLScene.h  
 )
 
-target_link_libraries(${TargetName} PRIVATE  NGL Qt5::Widgets)
+target_link_libraries(${TargetName} PRIVATE  NGL Qt::Widgets Qt::OpenGL)
 
 add_custom_target(${TargetName}CopyShaders ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
