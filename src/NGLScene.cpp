@@ -9,6 +9,7 @@
 #include <ngl/ShaderLib.h>
 #include <ngl/Vec2.h>
 #include <ngl/Random.h>
+#include <iostream>
 
 NGLScene::NGLScene()
 {
